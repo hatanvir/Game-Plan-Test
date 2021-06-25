@@ -33,9 +33,9 @@ import 'package:http/http.dart' as http;
 
   //fetching cricket matches data
   void _getCricketMatchData()async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
     isLoadingProgressBarCricket.value = true;
     try{
-      var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
         isConnectedInternetCricket.value = true;
         var response = await http.post(Uri.parse('https://myplan.rultest2.com/api/cricket/match'));
@@ -55,8 +55,10 @@ import 'package:http/http.dart' as http;
         isLoadingProgressBarCricket.value = false;
       }
 
-    }catch(_){
-      Get.snackbar("Error","Internal Error Occurred",backgroundColor:  HexColor('#B6682A'),snackPosition: SnackPosition.BOTTOM);
+    }catch(e){
+      Get.snackbar("Error","Internal Error Occurred"
+          ,backgroundColor:  HexColor('#B6682A'),
+          snackPosition: SnackPosition.BOTTOM);
       isLoadingProgressBarCricket.value = false;
       isConnectedInternetCricket.value = false;
 
@@ -64,13 +66,12 @@ import 'package:http/http.dart' as http;
   }
   //fetching football matches data
   void _getFootballMatchData() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
     isLoadingProgressBarFootball.value = true;
     try{
-      var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
         isConnectedInternetFootball.value = true;
         var response = await http.post(Uri.parse('https://myplan.rultest2.com/api/football/match'));
-        print(response.body);
         if(response.statusCode == 200){
           var d = json.decode(response.body);
           if(d['matches'].length == 0){
@@ -87,8 +88,11 @@ import 'package:http/http.dart' as http;
         isLoadingProgressBarFootball.value = false;
       }
 
-    }catch(_){
-      if(!Get.isSnackbarOpen)Get.snackbar("Error","Internal Error Occurred",backgroundColor:  HexColor('#B6682A'),snackPosition: SnackPosition.BOTTOM);
+    }catch(e){
+      if(!Get.isSnackbarOpen)Get.snackbar(
+          "Error","Internal Error Occurred",
+          backgroundColor:  HexColor('#B6682A'),
+          snackPosition: SnackPosition.BOTTOM);
       isLoadingProgressBarFootball.value = false;
       isConnectedInternetFootball.value = false;
     }
